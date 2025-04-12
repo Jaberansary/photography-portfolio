@@ -101,8 +101,8 @@ const Artworks = () => {
             <button
               onClick={handlePrev}
               className="absolute left-4 top-1/2 transform -translate-y-1/2 text-zinc-700 text-3xl
-              hover:text-white hover:bg-zinc-700 hover:shadow-lg hover:rounded-full
-              hover:scale-110 hover:-translate-y-1 hover:ring-2 hover:ring-zinc-400
+              hover:text-white hover:bg-sky-200 hover:shadow-lg hover:rounded-full
+              hover:scale-110 hover:-translate-y-1 hover:ring-2 hover:ring-sky-400
               transition-all duration-300 ease-in-out p-2 z-30"
             >
               &lt;
@@ -111,8 +111,8 @@ const Artworks = () => {
             <button
               onClick={handleNext}
               className="absolute right-4 top-1/2 transform -translate-y-1/2 text-zinc-700 text-3xl
-              hover:text-white hover:bg-zinc-700 hover:shadow-lg hover:rounded-full
-              hover:scale-110 hover:-translate-y-1 hover:ring-2 hover:ring-zinc-400
+              hover:text-white hover:bg-sky-200 hover:shadow-lg hover:rounded-full
+              hover:scale-110 hover:-translate-y-1 hover:ring-2 hover:ring-sky-400
               transition-all duration-300 ease-in-out p-2 z-30"
             >
               &gt;
