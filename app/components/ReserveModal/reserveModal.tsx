@@ -1,21 +1,40 @@
-import React, { useState } from "react";
-import InfoForm from "./infoForm";
+import React, { useRef, useState } from "react";
+import InfoForm, { InfoFormRef, FormData } from "./infoForm";
 import Calendar from "./calendar";
 import TimeSlots from "./timeSlots";
 import CategorySelection from "./categorySelection";
 
 const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
-  const [currentStep, setCurrentStep] = useState(0); // مرحله فعلی (0: فرم اطلاعات، 1: تقویم، 2: ساعت، 3: دسته‌بندی)
+  const [currentStep, setCurrentStep] = useState(0);
+  const [FormData, setFormData] = useState<FormData>({
+    fullName: "",
+    phone: "",
+    email: "",
+  });
+
+  const infoFormRef = useRef<InfoFormRef>(null);
 
   const steps = [
-    { label: "Info Form", component: <InfoForm /> },
+    {
+      label: "Info Form",
+      component: (
+        <InfoForm
+          ref={infoFormRef}
+          onDataChange={(data) => setFormData(data)}
+        />
+      ),
+    },
     { label: "Calendar", component: <Calendar /> },
     { label: "Select Time", component: <TimeSlots /> },
     { label: "Photography Category", component: <CategorySelection /> },
   ];
 
   const nextStep = () => {
-    if (currentStep < steps.length - 1) {
+    if (currentStep === 0) {
+      if (infoFormRef.current?.validateForm()) {
+        setCurrentStep(currentStep + 1);
+      }
+    } else {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -48,12 +67,11 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
           borderRadius: "8px",
           width: "80%",
           maxWidth: "600px",
-          position: "relative", // برای ضربدر در گوشه
+          position: "relative",
         }}
       >
-        {/* دکمه بستن */}
         <button
-          onClick={closeModal} // فراخوانی تابع برای بستن مودال
+          onClick={closeModal}
           className="absolute top-4 right-4 text-zinc-700 text-3xl
             hover:text-white hover:bg-rose-500 hover:shadow-lg hover:rounded-full
             hover:scale-110 hover:rotate-90 transition-all duration-300 ease-in-out p-2 z-30"
@@ -61,7 +79,9 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
           &times;
         </button>
 
-        <h2>{steps[currentStep].label}</h2>
+        <h2 className="inline-block text-2xl font-semibold border-b-2 border-sky-500 mb-2">
+          {steps[currentStep].label}
+        </h2>
         {steps[currentStep].component}
 
         <div
@@ -71,7 +91,6 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
             justifyContent: "space-between",
           }}
         >
-          {/* دکمه قبلی */}
           {currentStep > 0 && (
             <button
               onClick={prevStep}
@@ -88,13 +107,12 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
             </button>
           )}
 
-          {/* دکمه بعدی */}
           {currentStep < steps.length - 1 && (
             <button
               onClick={nextStep}
+              className="bg-sky-400"
               style={{
                 padding: "10px 20px",
-                backgroundColor: "#007BFF",
                 color: "white",
                 border: "none",
                 borderRadius: "5px",

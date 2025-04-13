@@ -7,13 +7,10 @@ import Awards from "./components/award";
 import Artworks from "./components/artworks";
 import ReserveModal from "./components/ReserveModal/reserveModal";
 const Page = () => {
-  // وضعیت برای باز و بسته کردن مودال رزرو
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // تابع برای باز کردن مودال
   const openModal = () => setIsModalOpen(true);
 
-  // تابع برای بستن مودال
   const closeModal = () => setIsModalOpen(false);
 
   return (
