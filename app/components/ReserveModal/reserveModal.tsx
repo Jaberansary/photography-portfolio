@@ -6,7 +6,7 @@ import CategorySelection from "./categorySelection";
 
 const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [FormData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<FormData>({
     fullName: "",
     phone: "",
     email: "",
@@ -44,6 +44,8 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
       setCurrentStep(currentStep - 1);
     }
   };
+
+  console.log(formData);
 
   return (
     <div
