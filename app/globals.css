@@ -53,6 +53,11 @@
   border-radius: 9999px;
 }
 
+.slick-list {
+  height: 270px !important; /* مقدار مناسب رو انتخاب کن */
+  padding:20px !important;
+
+}
 
 /* Global Styles */
 body {

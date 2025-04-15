@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
 import InfoForm, { InfoFormRef, FormData } from "./infoForm";
 import TimeSchedule from "./timeSchedule";
-import CategorySelection from "./categorySelection";
+import PhotographyCategory from "./photographyCategory";
+import SetLocation from "./setLocation";
 
 const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -37,7 +38,8 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
         />
       ),
     },
-    { label: "Photography Category", component: <CategorySelection /> },
+    { label: "Photography Category", component: <PhotographyCategory /> },
+    { label: "Photography Category", component: <SetLocation /> },
   ];
 
   const nextStep = () => {
