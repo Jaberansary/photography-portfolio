@@ -3,6 +3,9 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
 @keyframes slideIn {
   0% {
     transform: translateX(-100%);
@@ -32,6 +35,23 @@
 }
 
 
+.react-datepicker__header {
+  background-color: #bae6fd !important; /* sky-400 */
+  color: white;
+  border-bottom: none;
+}
+
+.fully-booked-day {
+
+  color: #f43f5e !important;
+  border-radius: 9999px;
+}
+
+.selected-day {
+  background-color: #38bdf8 !important; /* sky-400 */
+  color: white !important;
+  border-radius: 9999px;
+}
 
 
 /* Global Styles */

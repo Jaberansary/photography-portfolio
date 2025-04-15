@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import InfoForm, { InfoFormRef, FormData } from "./infoForm";
-import Calendar from "./calendar";
-import TimeSlots from "./timeSlots";
+import TimeSchedule from "./timeSchedule";
 import CategorySelection from "./categorySelection";
 
 const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
@@ -11,6 +10,9 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
     phone: "",
     email: "",
   });
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
 
   const infoFormRef = useRef<InfoFormRef>(null);
 
@@ -24,14 +26,27 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
         />
       ),
     },
-    { label: "Calendar", component: <Calendar /> },
-    { label: "Select Time", component: <TimeSlots /> },
+    {
+      label: "Calendar",
+      component: (
+        <TimeSchedule
+          onSelect={(date, slot) => {
+            setSelectedDate(date);
+            setSelectedTimeSlot(slot);
+          }}
+        />
+      ),
+    },
     { label: "Photography Category", component: <CategorySelection /> },
   ];
 
   const nextStep = () => {
     if (currentStep === 0) {
       if (infoFormRef.current?.validateForm()) {
+        setCurrentStep(currentStep + 1);
+      }
+    } else if (currentStep === 1) {
+      if (selectedDate && selectedTimeSlot) {
         setCurrentStep(currentStep + 1);
       }
     } else {
@@ -45,7 +60,11 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
     }
   };
 
-  console.log(formData);
+  console.log({
+    formData,
+    selectedDate,
+    selectedTimeSlot,
+  });
 
   return (
     <div
@@ -81,7 +100,7 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
           &times;
         </button>
 
-        <h2 className="inline-block text-2xl font-semibold border-b-2 border-sky-500 mb-2">
+        <h2 className="inline-block text-2xl font-semibold border-b-2 border-sky-400 mb-2">
           {steps[currentStep].label}
         </h2>
         {steps[currentStep].component}
@@ -112,13 +131,22 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
           {currentStep < steps.length - 1 && (
             <button
               onClick={nextStep}
-              className="bg-sky-400"
+              disabled={
+                currentStep === 1 && (!selectedDate || !selectedTimeSlot)
+              }
               style={{
                 padding: "10px 20px",
+                backgroundColor:
+                  currentStep === 1 && (!selectedDate || !selectedTimeSlot)
+                    ? "#ccc"
+                    : "#38BDF8",
                 color: "white",
                 border: "none",
                 borderRadius: "5px",
-                cursor: "pointer",
+                cursor:
+                  currentStep === 1 && (!selectedDate || !selectedTimeSlot)
+                    ? "not-allowed"
+                    : "pointer",
               }}
             >
               Next

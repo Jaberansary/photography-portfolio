@@ -1,7 +1,7 @@
 import React from "react";
 
-function CategorySelection() {
+function categorySelection() {
   return <div>categorySelection</div>;
 }
 
-export default CategorySelection;
+export default categorySelection;
