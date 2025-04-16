@@ -7,8 +7,8 @@ const photographyTypes = [
   { title: "Portrait", imageUrl: "/categories/portraite.png" },
   { title: "Children", imageUrl: "/categories/kids.png" },
   { title: "Business", imageUrl: "/categories/Business.png" },
-  { title: "Fashion", imageUrl: "/categories/fashion.png" },
   { title: "Product", imageUrl: "/categories/product.png" },
+  { title: "Fashion", imageUrl: "/categories/fashion.png" },
 ];
 
 const PhotographyCategory: React.FC = () => {

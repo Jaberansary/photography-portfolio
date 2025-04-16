@@ -15,6 +15,9 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
 
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [customLocation, setCustomLocation] = useState("");
+
   const infoFormRef = useRef<InfoFormRef>(null);
 
   const steps = [
@@ -39,7 +42,21 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
       ),
     },
     { label: "Photography Category", component: <PhotographyCategory /> },
-    { label: "Photography Category", component: <SetLocation /> },
+    {
+      label: "Photography Locations",
+      component: (
+        <SetLocation
+          selectedLocation={selectedLocation}
+          setSelectedLocation={setSelectedLocation}
+          customLocation={customLocation}
+          setCustomLocation={setCustomLocation}
+        />
+      ),
+    },
+    {
+      label: "Preview",
+      component: <PhotographyCategory />,
+    },
   ];
 
   const nextStep = () => {
@@ -102,7 +119,7 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
           &times;
         </button>
 
-        <h2 className="inline-block text-2xl font-semibold border-b-2 border-sky-400 mb-2">
+        <h2 className="inline-block text-2xl font-semibold border-b-2 border-sky-400 mb-4">
           {steps[currentStep].label}
         </h2>
         {steps[currentStep].component}
