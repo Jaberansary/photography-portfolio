@@ -41,19 +41,19 @@ const SetLocation: React.FC<Props> = ({
   const [showMapModal, setShowMapModal] = useState(false);
   const [isFetchingAddress, setIsFetchingAddress] = useState(false);
 
-  function LocationClick() {
-    useMapEvents({
-      click(e) {
-        const coords: [number, number] = [e.latlng.lat, e.latlng.lng];
-        setPosition(coords);
-        setSelectedLocation("");
-      },
-    });
-
+  function LocationClick({ enabled }: { enabled: boolean }) {
+    if (enabled) {
+      useMapEvents({
+        click(e) {
+          const coords: [number, number] = [e.latlng.lat, e.latlng.lng];
+          setPosition(coords);
+          setSelectedLocation("");
+        },
+      });
+    }
     return null;
   }
 
-  // گرفتن آدرس از مختصات
   async function fetchAddressFromCoords(lat: number, lon: number) {
     setIsFetchingAddress(true);
     try {
@@ -62,6 +62,7 @@ const SetLocation: React.FC<Props> = ({
       );
       const data = await res.json();
       return data.display_name || `${lat}, ${lon}`;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       return `${lat}, ${lon}`;
     } finally {
@@ -79,15 +80,14 @@ const SetLocation: React.FC<Props> = ({
 
   const defaultIcon = new L.Icon({
     iconUrl:
-      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png", // آدرس آیکون پیش‌فرض
-    iconSize: [25, 41], // اندازه آیکون پیش‌فرض
-    iconAnchor: [12, 41], // محل قرارگیری آیکون نسبت به موقعیت انتخابی
-    popupAnchor: [1, -34], // محل نمایش پاپ‌آپ نسبت به آیکون
+      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
   });
 
   return (
     <div className="flex flex-col space-y-6 max-h-[80vh]">
-      {/* لیست لوکیشن‌ها */}
       <div className="overflow-y-auto max-h-[50vh] pr-1 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
         <div className="grid grid-cols-2 gap-4 m-4">
           {locations.map((loc, index) => (
@@ -118,7 +118,6 @@ const SetLocation: React.FC<Props> = ({
         </div>
       </div>
 
-      {/* ورودی آدرس سفارشی با دکمه انتخاب روی نقشه */}
       <div className="mt-auto">
         <label className="block mb-2 font-medium text-zinc-700">
           {selectedLocation === "Client's Home"
@@ -148,7 +147,6 @@ const SetLocation: React.FC<Props> = ({
         </div>
       </div>
 
-      {/* modal نقشه */}
       {showMapModal && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl h-[500px] p-4 relative">
@@ -168,7 +166,7 @@ const SetLocation: React.FC<Props> = ({
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                 />
-                <LocationClick />
+                <LocationClick enabled={showMapModal} />
                 {position && (
                   <Marker position={position} icon={defaultIcon}>
                     <Popup>
@@ -180,7 +178,6 @@ const SetLocation: React.FC<Props> = ({
                 )}
               </MapContainer>
 
-              {/* دکمه تأیید انتخاب */}
               {position && (
                 <button
                   onClick={handleConfirmLocation}
