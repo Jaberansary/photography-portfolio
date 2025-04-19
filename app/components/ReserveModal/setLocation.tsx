@@ -42,15 +42,15 @@ const SetLocation: React.FC<Props> = ({
   const [isFetchingAddress, setIsFetchingAddress] = useState(false);
 
   function LocationClick({ enabled }: { enabled: boolean }) {
-    if (enabled) {
-      useMapEvents({
-        click(e) {
-          const coords: [number, number] = [e.latlng.lat, e.latlng.lng];
-          setPosition(coords);
-          setSelectedLocation("");
-        },
-      });
-    }
+    useMapEvents({
+      click(e) {
+        if (!enabled) return;
+        const coords: [number, number] = [e.latlng.lat, e.latlng.lng];
+        setPosition(coords);
+        setSelectedLocation("");
+      },
+    });
+
     return null;
   }
 

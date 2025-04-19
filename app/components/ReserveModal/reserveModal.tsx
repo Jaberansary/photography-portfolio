@@ -2,7 +2,8 @@ import React, { useRef, useState } from "react";
 import InfoForm, { InfoFormRef, FormData } from "./infoForm";
 import TimeSchedule from "./timeSchedule";
 import PhotographyCategory from "./photographyCategory";
-import SetLocation from "./setLocation";
+import dynamic from "next/dynamic";
+const SetLocation = dynamic(() => import("./setLocation"), { ssr: false });
 
 const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
   const [currentStep, setCurrentStep] = useState(0);
