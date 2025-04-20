@@ -8,6 +8,57 @@
 @import "~leaflet/dist/leaflet.css";
 
 
+/* An Animation for Shimmer effect */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.group-hover\:animate-shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* Smooth transition for the hover effect */
+.group {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.group span {
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.group:hover span {
+  color: #000; /* Black text when hovered */
+}
+
+.group:hover .bg-white {
+  background-color: #fff;
+}
+
+/* Optional: Add a smooth glow or border when hovering */
+.group:hover {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+
 
 @keyframes slideIn {
   0% {

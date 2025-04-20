@@ -22,7 +22,7 @@ const Page = () => {
       <Awards />
       <Artworks />
 
-      <section className="bg-sky-200 py-16 text-center">
+      <section id="reserve" className="bg-sky-200 py-16 text-center">
         <h2 className="text-3xl font-semibold text-white mb-4">
           Book Your Photography Session Now!
         </h2>
