@@ -140,7 +140,7 @@ const SetLocation: React.FC<Props> = ({
           />
           <button
             onClick={() => setShowMapModal(true)}
-            className="px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-600 transition whitespace-nowrap"
+            className="px-4 py-2 bg-sky-400 text-white rounded hover:bg-sky-600 transition whitespace-nowrap"
           >
             Choose on map
           </button>
@@ -183,7 +183,7 @@ const SetLocation: React.FC<Props> = ({
                 <button
                   onClick={handleConfirmLocation}
                   disabled={isFetchingAddress}
-                  className="absolute z-[1000] bottom-4 left-1/2 transform -translate-x-1/2 bg-sky-600 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-sky-700 transition"
+                  className="absolute z-[1000] bottom-4 left-1/2 transform -translate-x-1/2 bg-sky-400 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-sky-600 transition"
                 >
                   {isFetchingAddress ? "Loading..." : "Confirm location "}
                 </button>

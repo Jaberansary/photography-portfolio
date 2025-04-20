@@ -3,6 +3,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
   ForwardRefRenderFunction,
+  useEffect,
 } from "react";
 
 export type FormData = {
@@ -13,6 +14,7 @@ export type FormData = {
 
 type InfoFormProps = {
   onDataChange: (data: FormData) => void;
+  defaultData: FormData;
 };
 
 export type InfoFormRef = {
@@ -20,19 +22,19 @@ export type InfoFormRef = {
 };
 
 const InfoForm: ForwardRefRenderFunction<InfoFormRef, InfoFormProps> = (
-  { onDataChange },
+  { onDataChange, defaultData },
   ref
 ) => {
-  const [formData, setFormData] = useState<FormData>({
-    fullName: "",
-    phone: "",
-    email: "",
-  });
+  const [formData, setFormData] = useState<FormData>(defaultData);
 
   const [errors, setErrors] = useState({
     fullName: "",
     phone: "",
   });
+
+  useEffect(() => {
+    setFormData(defaultData);
+  }, [defaultData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -70,20 +72,17 @@ const InfoForm: ForwardRefRenderFunction<InfoFormRef, InfoFormProps> = (
         phone: "",
       };
 
-
       if (formData.fullName.trim().length < 3) {
         newErrors.fullName = "Name must be at least 3 characters.";
       } else if (!/^[a-zA-Z\s]+$/.test(formData.fullName)) {
         newErrors.fullName = "Only letters are allowed in the name.";
       }
 
-
       if (!/^\d{10,}$/.test(formData.phone.trim())) {
         newErrors.phone = "Phone must be at least 10 digits and numeric.";
       }
 
       setErrors(newErrors);
-
 
       if (
         formData.email &&

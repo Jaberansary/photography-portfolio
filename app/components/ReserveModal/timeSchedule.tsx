@@ -1,22 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-// نمونه‌ی استاتیک از روزهایی که بازه‌های زمانی‌شون پر شده
-const fullyBookedDates = [new Date("2025-04-16"), new Date("2025-04-18")];
+const fullyBookedDates = [new Date("2025-04-26"), new Date("2025-04-28")];
 
-// نمونه‌ی استاتیک از بازه‌های زمانی که برای یک روز خاص رزرو شدن
 const reservedTimeSlots: { [key: string]: string[] } = {
-  "2025-04-17": ["09:00 - 11:00", "12:00 - 14:00"], // فقط بازه 4 تا 6 بازه
+  "2025-04-25": ["09:00 - 11:00", "12:00 - 14:00"],
 };
 
 const allTimeSlots = ["09:00 - 11:00", "12:00 - 14:00", "16:00 - 18:00"];
 
-const TimeSchedule: React.FC<{
+type TimeScheduleProps = {
   onSelect: (date: Date, timeSlot: string) => void;
-}> = ({ onSelect }) => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  initialDate?: Date | null;
+  initialSlot?: string | null;
+};
+
+const TimeSchedule: React.FC<TimeScheduleProps> = ({
+  onSelect,
+  initialDate = null,
+  initialSlot = null,
+}) => {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate);
+  const [selectedSlot, setSelectedSlot] = useState<string | null>(initialSlot);
+
+  useEffect(() => {
+    setSelectedDate(initialDate);
+    setSelectedSlot(initialSlot);
+  }, [initialDate, initialSlot]);
 
   const isFullyBooked = (date: Date) => {
     return fullyBookedDates.some(
@@ -31,11 +42,11 @@ const TimeSchedule: React.FC<{
 
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
-    setSelectedSlot(null); // ریست کردن بازه قبلی
+    setSelectedSlot(null);
   };
 
   const handleTimeSlotClick = (slot: string) => {
-    if (disabledSlots.includes(slot)) return; // جلوش رو همینجا می‌گیریم
+    if (disabledSlots.includes(slot)) return;
     setSelectedSlot(slot);
     if (selectedDate) {
       onSelect(selectedDate, slot);
@@ -44,13 +55,11 @@ const TimeSchedule: React.FC<{
 
   const getDisabledSlots = (date: Date | null) => {
     if (!date) return [];
-    const key = date.toLocaleDateString("sv-SE"); // یعنی '2025-04-17'
+    const key = date.toLocaleDateString("sv-SE");
     return reservedTimeSlots[key] || [];
   };
 
   const disabledSlots = getDisabledSlots(selectedDate);
-
-  console.log("disabledSlots", disabledSlots);
 
   return (
     <div className="space-y-4">
@@ -67,14 +76,12 @@ const TimeSchedule: React.FC<{
           dateFormat="MMMM d, yyyy"
           className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
           dayClassName={(date) => {
-            const isFully = isFullyBooked(date); // بررسی اینکه روز پر است
+            const isFully = isFullyBooked(date);
             const isSelected =
-              selectedDate?.toDateString() === date.toDateString(); // بررسی روز انتخابی
-
-            if (isFully) return "fully-booked-day"; // روزهایی که پر هستند
-            if (isSelected) return "selected-day"; // روز انتخابی
-
-            return ""; // سایر روزها به حالت پیش‌فرض
+              selectedDate?.toDateString() === date.toDateString();
+            if (isFully) return "fully-booked-day";
+            if (isSelected) return "selected-day";
+            return "";
           }}
         />
       </div>

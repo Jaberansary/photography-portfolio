@@ -1,5 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Slider from "react-slick";
+
+interface PhotographyCategoryProps {
+  selectedCategory: string | null;
+  setSelectedCategory: (category: string) => void;
+}
 
 const photographyTypes = [
   { title: "Wedding", imageUrl: "/categories/wedding.png" },
@@ -11,9 +16,10 @@ const photographyTypes = [
   { title: "Fashion", imageUrl: "/categories/fashion.png" },
 ];
 
-const PhotographyCategory: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
+const PhotographyCategory: React.FC<PhotographyCategoryProps> = ({
+  selectedCategory,
+  setSelectedCategory,
+}) => {
   const settings = {
     infinite: true,
     centerMode: true,

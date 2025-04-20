@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState, useRef } from "react";
 import InfoForm, { InfoFormRef, FormData } from "./infoForm";
 import TimeSchedule from "./timeSchedule";
 import PhotographyCategory from "./photographyCategory";
@@ -16,8 +16,11 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
 
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedLocation, setSelectedLocation] = useState("");
   const [customLocation, setCustomLocation] = useState("");
+
+  const [errorMessage, setErrorMessage] = useState(""); // NEW
 
   const infoFormRef = useRef<InfoFormRef>(null);
 
@@ -28,6 +31,7 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
         <InfoForm
           ref={infoFormRef}
           onDataChange={(data) => setFormData(data)}
+          defaultData={formData}
         />
       ),
     },
@@ -39,10 +43,20 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
             setSelectedDate(date);
             setSelectedTimeSlot(slot);
           }}
+          initialDate={selectedDate}
+          initialSlot={selectedTimeSlot}
         />
       ),
     },
-    { label: "Photography Category", component: <PhotographyCategory /> },
+    {
+      label: "Photography Category",
+      component: (
+        <PhotographyCategory
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
+      ),
+    },
     {
       label: "Photography Locations",
       component: (
@@ -55,24 +69,63 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
       ),
     },
     {
-      label: "Preview",
-      component: <PhotographyCategory />,
+      label: "Preview Your Booking",
+      component: (
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-base my-4">
+            <div className="flex">
+              <span className="w-32 text-sky-500 font-medium">Full Name:</span>
+              <span>{formData.fullName || "-"}</span>
+            </div>
+            <div className="flex">
+              <span className="w-32 text-sky-500 font-medium">Email:</span>
+              <span>{formData.email || "-"}</span>
+            </div>
+            <div className="flex">
+              <span className="w-32 text-sky-500 font-medium">Phone:</span>
+              <span>{formData.phone || "-"}</span>
+            </div>
+            <div className="flex">
+              <span className="w-32 text-sky-500 font-medium">Date:</span>
+              <span>{selectedDate?.toLocaleDateString() || "-"}</span>
+            </div>
+            <div className="flex">
+              <span className="w-32 text-sky-500 font-medium">Time Slot:</span>
+              <span>{selectedTimeSlot || "-"}</span>
+            </div>
+            <div className="flex">
+              <span className="w-32 text-sky-500 font-medium">Category:</span>
+              <span>{selectedCategory || "-"}</span>
+            </div>
+            <div className="flex col-span-1 sm:col-span-2">
+              <span className="w-32 text-sky-500 font-medium">Location:</span>
+              <span>{selectedLocation || customLocation || "-"}</span>
+            </div>
+          </div>
+        </div>
+      ),
     },
   ];
 
   const nextStep = () => {
+    setErrorMessage("");
     if (currentStep === 0) {
       if (infoFormRef.current?.validateForm()) {
         setCurrentStep(currentStep + 1);
+      } else {
+        setErrorMessage("Please fill out all required fields.");
       }
     } else if (currentStep === 1) {
       if (selectedDate && selectedTimeSlot) {
         setCurrentStep(currentStep + 1);
+      } else {
+        setErrorMessage("Please select a date and a time slot.");
       }
     } else if (currentStep === 3) {
-      // Check for location on step 3
       if (selectedLocation || customLocation.trim()) {
         setCurrentStep(currentStep + 1);
+      } else {
+        setErrorMessage("Please select or enter a location.");
       }
     } else {
       setCurrentStep(currentStep + 1);
@@ -80,16 +133,11 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
   };
 
   const prevStep = () => {
+    setErrorMessage("");
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
   };
-
-  console.log({
-    formData,
-    selectedDate,
-    selectedTimeSlot,
-  });
 
   return (
     <div
@@ -130,24 +178,17 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
         </h2>
         {steps[currentStep].component}
 
-        <div
-          style={{
-            marginTop: "20px",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
+        {errorMessage && (
+          <p className="text-rose-500 mt-4 text-sm font-medium">
+            {errorMessage}
+          </p>
+        )}
+
+        <div className="mt-6 flex justify-between items-center">
           {currentStep > 0 && (
             <button
               onClick={prevStep}
-              style={{
-                padding: "10px 20px",
-                backgroundColor: "#FF0000",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
+              className="px-6 py-3 bg-rose-600 text-white rounded-full shadow-lg hover:bg-rose-700 hover:scale-105 transition-all duration-300"
             >
               Previous
             </button>
@@ -156,34 +197,21 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
           {currentStep < steps.length - 1 && (
             <button
               onClick={nextStep}
-              disabled={
-                (currentStep === 1 && (!selectedDate || !selectedTimeSlot)) ||
-                (currentStep === 3 &&
-                  !selectedLocation &&
-                  !customLocation.trim()) // Check location here
-              }
-              style={{
-                padding: "10px 20px",
-                backgroundColor:
-                  (currentStep === 1 && (!selectedDate || !selectedTimeSlot)) ||
-                  (currentStep === 3 &&
-                    !selectedLocation &&
-                    !customLocation.trim()) // Disabled background
-                    ? "#ccc"
-                    : "#38BDF8",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor:
-                  (currentStep === 1 && (!selectedDate || !selectedTimeSlot)) ||
-                  (currentStep === 3 &&
-                    !selectedLocation &&
-                    !customLocation.trim()) // Disabled cursor
-                    ? "not-allowed"
-                    : "pointer",
-              }}
+              className="ml-auto px-6 py-3 rounded-full text-white shadow-lg transition-all duration-300 bg-sky-400 hover:bg-sky-600"
             >
               Next
+            </button>
+          )}
+
+          {currentStep === steps.length - 1 && (
+            <button
+              onClick={() => {
+                alert("Booking confirmed!");
+                closeModal();
+              }}
+              className="ml-auto px-6 py-3 rounded-full text-white bg-sky-400 hover:bg-sky-600 hover:scale-105 shadow-lg transition-all duration-300"
+            >
+              Confirm Booking
             </button>
           )}
         </div>
