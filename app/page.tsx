@@ -6,6 +6,8 @@ import About from "./components/about";
 import Awards from "./components/award";
 import Artworks from "./components/artworks";
 import ReserveModal from "./components/ReserveModal/reserveModal";
+import Footer from "./components/footer";
+
 const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -37,6 +39,8 @@ const Page = () => {
       </section>
 
       {isModalOpen && <ReserveModal closeModal={closeModal} />}
+
+      <Footer />
     </div>
   );
 };
