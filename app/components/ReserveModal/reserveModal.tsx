@@ -69,6 +69,11 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
       if (selectedDate && selectedTimeSlot) {
         setCurrentStep(currentStep + 1);
       }
+    } else if (currentStep === 3) {
+      // Check for location on step 3
+      if (selectedLocation || customLocation.trim()) {
+        setCurrentStep(currentStep + 1);
+      }
     } else {
       setCurrentStep(currentStep + 1);
     }
@@ -152,19 +157,28 @@ const ReserveModal = ({ closeModal }: { closeModal: () => void }) => {
             <button
               onClick={nextStep}
               disabled={
-                currentStep === 1 && (!selectedDate || !selectedTimeSlot)
+                (currentStep === 1 && (!selectedDate || !selectedTimeSlot)) ||
+                (currentStep === 3 &&
+                  !selectedLocation &&
+                  !customLocation.trim()) // Check location here
               }
               style={{
                 padding: "10px 20px",
                 backgroundColor:
-                  currentStep === 1 && (!selectedDate || !selectedTimeSlot)
+                  (currentStep === 1 && (!selectedDate || !selectedTimeSlot)) ||
+                  (currentStep === 3 &&
+                    !selectedLocation &&
+                    !customLocation.trim()) // Disabled background
                     ? "#ccc"
                     : "#38BDF8",
                 color: "white",
                 border: "none",
                 borderRadius: "5px",
                 cursor:
-                  currentStep === 1 && (!selectedDate || !selectedTimeSlot)
+                  (currentStep === 1 && (!selectedDate || !selectedTimeSlot)) ||
+                  (currentStep === 3 &&
+                    !selectedLocation &&
+                    !customLocation.trim()) // Disabled cursor
                     ? "not-allowed"
                     : "pointer",
               }}

@@ -152,9 +152,10 @@ const SetLocation: React.FC<Props> = ({
           <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl h-[500px] p-4 relative">
             <button
               onClick={() => setShowMapModal(false)}
-              className="absolute top-3 right-4 text-gray-600 text-xl hover:text-gray-800"
+              className="absolute top-3 right-4 text-3xl z-[1000] hover:text-white hover:bg-rose-500 hover:shadow-lg hover:rounded-full
+            hover:scale-110 hover:rotate-90"
             >
-              ✖
+              &times;
             </button>
             <div className="h-full w-full relative">
               <MapContainer
